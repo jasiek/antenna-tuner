@@ -1,7 +1,10 @@
 #include <Arduino.h>
 
-#define MOTOR_STEPS 200
+#define MOTOR_STEPS 200 // 1.8 degree per step
 #define RPM 120
+
+// This uses the MH-Tiny board with an ATtiny88
+// ![https://user-images.githubusercontent.com/68873801/89062312-803fa100-d366-11ea-9142-69c36b0ca764.png]
 
 #define DIR PD3
 #define STEP PD4
@@ -16,7 +19,22 @@ A4988 stepper(MOTOR_STEPS, DIR, STEP);
 #define ZERO_SENSOR PD5
 #define LED PD0
 
-#define FINE_STEP_DELAY 200
+#define FINE_STEP_DELAY 300
+#define MAIN_LOOP_DELAY 10
+
+int debounce(uint8_t pin)
+{
+    int state = digitalRead(pin);
+    delay(1);
+    if (state == digitalRead(pin))
+    {
+        return state;
+    }
+    else
+    {
+        return LOW;
+    }
+}
 
 void calibrate()
 {
@@ -48,16 +66,16 @@ void setup()
 void loop()
 {
     digitalWrite(LED, LOW);
-    delay(10);
+    delay(MAIN_LOOP_DELAY);
 
     // fine controls, one step per push
-    if (digitalRead(LEFT_FINE) == LOW)
+    if (debounce(LEFT_FINE) == LOW)
     {
         digitalWrite(LED, HIGH);
         stepper.move(1);
         delay(FINE_STEP_DELAY);
     }
-    if (digitalRead(RIGHT_FINE) == LOW)
+    if (debounce(RIGHT_FINE) == LOW)
     {
         digitalWrite(LED, HIGH);
         stepper.move(-1);
@@ -65,12 +83,12 @@ void loop()
     }
 
     // coarse controls, continuous movement
-    if (digitalRead(LEFT) == LOW)
+    if (debounce(LEFT) == LOW)
     {
         digitalWrite(LED, HIGH);
         stepper.move(1);
     }
-    if (digitalRead(RIGHT) == LOW)
+    if (debounce(RIGHT) == LOW)
     {
         digitalWrite(LED, HIGH);
         stepper.move(-1);
