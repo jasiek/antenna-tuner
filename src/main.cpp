@@ -51,7 +51,6 @@ void setup()
 {
     stepper.begin(RPM);
     stepper.enable();
-    stepper.setMicrostep(16); // A4988 is hard wired to 16 microsteps (MS2=HIGH)
 
     pinMode(LEFT_FINE, INPUT_PULLUP);
     pinMode(LEFT, INPUT_PULLUP);
