@@ -3,6 +3,7 @@
 Simple antenna tuner to tune a variable air capacitor for a magnetic loop antenna.
 
 ![prototype-controller.jpg](images/prototype-controller.jpg)
+![prototype-rotator.jpg](images/prototype-rotator.jpg)
 
 ### Uses
 
